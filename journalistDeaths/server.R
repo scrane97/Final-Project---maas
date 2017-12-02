@@ -23,4 +23,14 @@ shinyServer(function(input, output) {
     
   })
   
+  output$WorldMap <- renderText("A map of deaths across the world")
+  output$Page2 <- renderText("This is page 2!!!")
+  output$genderCorrelation <- renderText("This shows the correlation of Gender and the death method")
+  output$SummaryAndStats <- renderText("Here are summary and stats!!!")
+  output$AboutThisProject <- renderText("")
+  output$dataset <- renderText("The dataset for this project is Journalists Killed Worldwide Since 1992. 
+                                This data had been gathered from news sources from 1992 - 2016 
+                                by the Committee to Protect Journalists (CPJ)
+                              ")
+  
 })
