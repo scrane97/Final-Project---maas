@@ -1,7 +1,7 @@
 library(dplyr)
 library(plyr)
 data <- read.csv("data/cpj.csv")
-
+data <- as.data.frame(data, stringsAsFactors = FALSE)
 motive_confirmed <- function(){
   filter(data, Type == "Motive Confirmed")
 }
@@ -354,4 +354,26 @@ count_of_deaths <- function(){
     deaths_per_country[104,2] <- nrow(deaths)
     return(deaths_per_country)
     }
-##}
+
+most_deaths <- function(){
+  deaths <- count_of_deaths()
+  max <- as.data.frame(deaths[which.max(deaths$deaths),1], stringsAsFactors = FALSE)
+  m <- as.character(max[1,1])
+  return(m)
+}
+
+table_of_predeathconditions <- function() {
+  captured <- as.data.frame(data$Taken_captive, stringsAsFactors = FALSE)
+  captured <- filter(captured, data$Taken_captive == "Yes")
+  Captured <- c(nrow(captured))
+  threatened <- filter( as.data.frame(data$Threatened), data$Threatened == "Yes")
+  Threatened <- c(nrow(threatened))
+  
+  data <- arrange(data, Tortured)
+  Tortured <- c(98)
+  pre_death_conditions <- as.data.frame(Captured)
+  pre_death_conditions$Threatened <- Threatened
+  pre_death_conditions$Tortured <- Tortured
+ return(pre_death_conditions)
+}
+
