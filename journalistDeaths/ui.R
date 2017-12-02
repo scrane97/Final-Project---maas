@@ -17,9 +17,11 @@ shinyUI(
   navbarPage("Journalist Deaths", 
     tabPanel("About this Project",
              titlePanel("About this Project"),
-             textOutput('AboutThisProject'),
+             textOutput('aboutProject'),
              titlePanel("The Dataset"),
-             textOutput('dataset')
+             textOutput('dataset'),
+             titlePanel("Analysis"),
+             textOutput('analysis')
              ),
     tabPanel("World Map", 
               titlePanel("Map of Deaths"),
@@ -53,28 +55,4 @@ shinyUI(
               textOutput('SummaryAndStats')
               )
   )
-    
-  
-  
-  
-  
-  
-  
-  
-  # Sidebar with a slider input for number of bins 
-  # sidebarLayout(
-  #   sidebarPanel(
-  #      sliderInput("bins",
-  #                  "Number of bins:",
-  #                  min = 1,
-  #                  max = 50,
-  #                  value = 30)
-  #   ),
-  #   
-  #   # Show a plot of the generated distribution
-  #   mainPanel(
-  #      plotOutput("distPlot")
-  #   )
-  # )
-  
 ))
