@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+source("data_manipulation_cpj.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -43,7 +44,18 @@ shinyServer(function(input, output) {
   output$WorldMap <- renderText("A map of deaths across the world")
   output$Page2 <- renderText("This is page 2!!!")
   output$genderCorrelation <- renderText("This shows the correlation of Gender and the death method")
+  
   output$SummaryAndStats <- renderText("Here are summary and stats!!!")
+  
+  
+    make_table <- reactive({
+      return(table_of_predeathconditions())
+    })
+  
+  output$PreDeathConditions <- renderTable({
+     make_table()
+    })
+  
   output$AboutThisProject <- renderText("")
 
   
