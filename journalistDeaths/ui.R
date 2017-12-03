@@ -7,6 +7,21 @@
 #    http://shiny.rstudio.com/
 #
 
+library(dplyr)
+library(plyr)
+
+
+data <- read.csv("cpj.csv")
+data <- as.data.frame(data, stringsAsFactors = FALSE)
+
+countries <- select(data, Country_killed)
+countries <- as.data.frame(countries[!duplicated(countries$Country_killed),])
+v <- countries[-c(98),]
+countries <- as.data.frame(v)
+
+list <- countries$v
+
+
 library(shiny)
 
 # Define UI for application that draws a histogram
@@ -25,26 +40,24 @@ shinyUI(
              ),
     tabPanel("World Map", 
               titlePanel("Map of Deaths"),
-              textOutput('WorldMap'),
+              textOutput('WorldMap')
+              ),
+     tabPanel("Graphs", 
+              titlePanel("View of Countries"),
+              textOutput('These graphs show...'),
               sidebarLayout(
                 sidebarPanel(
-                  sliderInput("bins",
-                              "Number of bins:",
-                              min = 1,
-                              max = 50,
-                              value = 30)
+                  selectInput("countries",
+                              "Countries",
+                              list
+                              )
                 ),
-                
+
                 # Show a plot of the generated distribution
                 mainPanel(
                   plotOutput("distPlot")
                 )
               )
-              ),
-     
-     tabPanel("2", 
-              titlePanel("Page 2"),
-              textOutput('Page2')
               ),
      tabPanel("Gender and Method Correlation", 
               titlePanel("Gender and Method Correlation"), 
