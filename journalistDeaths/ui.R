@@ -52,7 +52,9 @@ shinyUI(
               ),
      tabPanel("Summary and Statistics", 
               titlePanel("Summary and Statistics"),
-              textOutput('SummaryAndStats')
+              textOutput('SummaryAndStats'),
+              tableOutput('PreDeathConditions')
               )
   )
 ))
+
