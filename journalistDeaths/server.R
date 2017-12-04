@@ -59,7 +59,8 @@ shinyServer(function(input, output) {
     piechart(input$countries)
     )
 
-  
+  output$women <- renderPlotly(gender_women())
+  output$men <- renderPlotly(gender_male())
 })
 
 
