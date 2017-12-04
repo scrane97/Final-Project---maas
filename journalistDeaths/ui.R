@@ -7,10 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-library(dplyr)
-library(plyr)
-
-
 data <- read.csv("cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 
@@ -30,7 +26,12 @@ shinyUI(
     
   fluidPage(
   navbarPage("Journalist Deaths", 
+             tags$head(
+               tags$style(HTML("body{ 
+                               background-image: url( http://roseburgfcc.org/wp-content/uploads/2016/03/storyteller1.jpg );
+                               }"))),
     tabPanel("About this Project",
+             column(10, class = "style"),
              titlePanel("About this Project"),
              textOutput('aboutProject'),
              titlePanel("The Dataset"),
