@@ -591,13 +591,42 @@ piechart <- function(input.country) {
     filter(Country_killed == input.country)
   country.data <- group_by(country.data, Nationality) %>%
     dplyr::summarize(n = n())
-  
+  head(country.data)
   # pie chart construction using plotly
-  pie <- plot_ly(country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'outside', textinfo = 'label+percent') %>%
+  pie <- plot_ly(country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'inside', textinfo = 'label') %>%
     layout(title = paste("Nationalities of Journalists Killed in", input.country),
            xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
            yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   print(pie)
 
+}
+
+
+gender_women <- function() {
+  women <- filter(data, Sex == "Female")
+  women <- select(women, Sex, Job)
+  women <- group_by(women, Job) %>%
+    dplyr::summarize(n=n())
+  chart <- plot_ly(women, labels = ~Job, values = ~n, type = 'pie', textposition = 'inside', textinfo = 'label') %>%
+    layout(title = paste("Types of Jobs held by Women who were killed"),
+           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  print(chart)
+  
+}
+
+gender_male <- function() {
+  women <- filter(data, Sex == "Male")
+  women <- select(women, Sex, Job)
+  women <- group_by(women, Job) %>%
+    dplyr::summarize(n=n())
+  chart <- plot_ly(women, labels = ~Job, values = ~n, type = 'pie', 
+                   marker = list(colors = c("#556677", "#AA3344", "#772200", 
+                                            "#11AA22", "#AA231B88")),
+                   textposition = 'inside', textinfo = 'label') %>%
+    layout(title = paste("Types of Jobs held by Men who were killed"),
+           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  print(chart)
 }
 

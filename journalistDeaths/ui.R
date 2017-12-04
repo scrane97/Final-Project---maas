@@ -20,6 +20,7 @@ list <- countries$v
 
 library(shiny)
 
+
 # Define UI for application that draws a histogram
 shinyUI(
   
@@ -65,9 +66,10 @@ shinyUI(
                 )
               )
               ),
-     tabPanel("Gender and Method Correlation", 
+     tabPanel("Gender and Job Correlations", 
               titlePanel("Gender and Method Correlation"), 
-              textOutput('genderCorrelation')
+              plotlyOutput("women"),
+              plotlyOutput("men")
               ),
      tabPanel("Summary and Statistics", 
               titlePanel("Summary and Statistics"),
