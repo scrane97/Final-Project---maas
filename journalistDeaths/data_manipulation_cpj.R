@@ -377,3 +377,167 @@ table_of_predeathconditions <- function() {
  return(pre_death_conditions)
 }
 
+map <- function(){
+  d <- count_of_deaths()
+  
+  country <- countrycode_data
+  country <- country$country.name.en
+  country <- as.data.frame(country, stringsAsFactors = FALSE)
+  
+  country$deaths <- 0
+  
+  country[1,2] <- 36
+  country[4,2] <- 61
+  country[7,2] <- 11
+  country[11,2] <- 4
+  country[12,2] <- 1
+  country[17,2] <- 6
+  country[20,2] <- 3
+  country[21,2] <- 29
+  country[24,2] <- 6
+  country[30,2] <-3
+  country[32,2] <-25
+  country[35,2] <- 49
+  country[38,2] <- 2
+  country[39,2] <- 1
+  country[40,2] <- 4
+  country[42,2] <- 12
+  country[43,2] <- 1
+  country[44,2] <- 2
+  country[46,2] <-1
+  country[47,2] <- 3
+  country[49,2] <-5
+  country[52,2] <- 84
+  country[56,2] <- 1
+  country[58,2] <- 4
+  country[61,2] <- 1
+  country[64,2] <- 14
+  country[68,2] <- 4
+  country[238,2] <- 2
+  country[69,2] <-3
+  country[70,2] <- 13
+  country[71,2] <- 6
+  country[73,2] <- 2
+  country[75,2]<- 2
+  country[81,2] <-10
+  country[85,2] <- 1
+  country[86,2] <- 1
+  country[87,2] <- 9
+  country[90,2] <-1
+  country[92,2] <- 1
+  country[97,2] <- 23
+  country[99,2] <- 4
+  country[102,2] <- 9
+  country[108,2] <- 23
+  country[112,2] <- 69
+  country[113,2] <- 11
+  country[114,2] <- 5
+  country[115,2] <- 264
+  country[116,2] <- 1
+  country[118,2] <- 21
+  country[57,2] <- 6
+  country[121,2] <- 1
+  country[124,2] <- 2
+  country[125,2 ]<- 5
+  country[130,2] <- 1
+  country[131,2] <-2
+  country[133,2] <- 1
+  country[134,2] <- 10
+  country[137,2] <- 13
+  country[139,2]<- 1
+  country[142,2] <-2
+  country[146,2] <-2
+  country[154,2] <- 89
+  country[162,2]<- 2
+  country[163,2] <- 4
+  country[166,2] <- 17
+  country[171,2]<- 2
+  country[173,2] <- 19
+  country[179,2]<- 86
+  country[182,2] <-1
+  country[183,2] <- 1
+  country[184,2] <-6
+  country[186,2] <- 15
+  country[187,2] <- 133
+  country[189,2] <- 1
+  country[54,2] <- 3
+  country[198,2] <- 80
+  country[199,2] <- 23
+  country[210,2] <- 1
+  country[213,2] <- 3
+  country[215,2] <- 17
+  country[221,2] <- 66
+  country[222,2] <- 4
+  country[224,2] <- 8
+  country[225,2] <- 1
+  country[226,2] <- 25
+  country[227,2] <-2
+  country[233,2]<- 116
+  country[235,2] <- 29
+  country[254,2] <- 2
+  country[236,2] <- 16
+  country[243,2] <- 1
+  country[244,2] <- 29
+  country[245,2] <- 1
+  country[250,2] <- 5
+  country[253,2] <- 3
+  country[251,2] <- 19
+  country[257, 2] <- 1
+  country[255,2] <- 9
+  country[258,2] <- 1
+  country[260,2] <- 9
+  country[261,2] <- 1
+  country[267,2]<- 19
+  country[270,2] <- 10
+  country[273,2] <- 1
+  
+  country$country_code <- countrycode_data$eurostat
+  url <- "https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson"
+  
+  doc <- readLines(url)
+  
+  write(doc, file = "tempgeoworld.json")
+  world <- geojson_read("tempgeoworld.json", what = "sp")
+  
+  map <- leaflet(world)
+  
+  par(mar = c(5,5,0,0), cex = 0.8)
+  
+  
+  
+  
+  #####
+  bins <- c(0, 1, 2,  4, 5,10,20,60,100,300)
+  pal <- colorBin("Blues", domain = country$deaths, bins = bins)
+  
+  labels <- sprintf(
+    "<strong>%s</strong><br/>%g deaths",
+    country$country, country$deaths
+  ) %>% lapply(htmltools::HTML)
+  
+  leaflet(world) %>%
+    setView(-96, 37.8, 4) %>%
+    addProviderTiles("MapBox", options = providerTileOptions(
+      id = "mapbox.light",
+      accessToken = Sys.getenv('pk.eyJ1IjoiYWJodWFuZyIsImEiOiJjamFwdW56ZGU0MmtxMnFvMnA4NTMwNmc4In0.VYRqH0KCDukhlyLZYZEmoQ'))) %>%
+    addPolygons(
+      fillColor = ~pal(country$deaths),
+      weight = 2,
+      opacity = 1,
+      color = "white",
+      dashArray = "3",
+      fillOpacity = 1,
+      highlight = highlightOptions(
+        weight = 5,
+        color = "#357DED",
+        dashArray = "",
+        fillOpacity = 0.7,
+        bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "15px",
+        direction = "auto")) %>%
+    addLegend(pal = pal, values = ~country$deaths, opacity = 0.7, title = NULL,
+              position = "bottomright")
+}
