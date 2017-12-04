@@ -1,7 +1,14 @@
 library(dplyr)
 library(plyr)
-
+library(lubridate)
 library(plotly)
+library(data.table)
+
+library(geojson)
+library(geojsonio)
+library(countrycode)
+library(rgdal)
+library(jsonlite)
 data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 motive_confirmed <- function(){
