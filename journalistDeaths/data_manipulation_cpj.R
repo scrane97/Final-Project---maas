@@ -1,7 +1,14 @@
 library(dplyr)
 library(plyr)
-library(ggplot2)
+library(lubridate)
+library(plotly)
+library(data.table)
 
+library(geojson)
+library(geojsonio)
+library(countrycode)
+library(rgdal)
+library(jsonlite)
 data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 motive_confirmed <- function(){
@@ -573,17 +580,13 @@ map <- function(){
 }
 
 piechart <- function(input.country) {
-  library("dplyr")
-  library("ggplot2")
-  library("plotly")
-  source("data_manipulation_cpj.R")
-  
+
   data <- motive_confirmed()
   
   
   # pie chart
   # pick the country, display the nationalities of dead journalists
-  input.country <- "Syria"
+
   country.data <- select(data, Nationality, Country_killed) %>%
     filter(Country_killed == input.country)
   country.data <- group_by(country.data, Nationality) %>%
@@ -594,5 +597,7 @@ piechart <- function(input.country) {
     layout(title = paste("Nationalities of Journalists Killed in", input.country),
            xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
            yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-  # print(pie)
+  print(pie)
+
 }
+
