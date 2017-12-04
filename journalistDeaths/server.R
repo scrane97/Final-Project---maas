@@ -13,15 +13,8 @@ source("data_manipulation_cpj.R")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    
+  output$typeDeath <- renderPlot({
+    source_fire_gender(input$countries)
   })
   
   output$aboutProject <- renderText("For this project we looked at a dataset about journalists killed in the last 25 years.
@@ -45,9 +38,8 @@ shinyServer(function(input, output) {
   output$Page2 <- renderText("This is page 2!!!")
   output$genderCorrelation <- renderText("This shows the correlation of Gender and the death method")
   
-  output$SummaryAndStats <- renderText("Here are summary and stats!!!")
-  
-  
+
+
     make_table <- reactive({
       return(table_of_predeathconditions())
     })
@@ -55,8 +47,14 @@ shinyServer(function(input, output) {
   output$PreDeathConditions <- renderTable({
      make_table()
     })
-  
+  output$deathInfo <- renderText("This table shows what the journalists experienced prior to death. As you can see, 1175 of the documented individuals have no recorded instances of torture, etc")
+  country <- most_deaths()
+  output$mostDeaths <- renderText({
+    paste("<br><br><b>Iraq<b>"," has had the most journalists die within its border since 1992")
+    })
+    
   output$AboutThisProject <- renderText("")
+  output$Map <- renderLeaflet(map())
 
   
 })
