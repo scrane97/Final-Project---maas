@@ -571,3 +571,28 @@ map <- function(){
     addLegend(pal = pal, values = ~country$deaths, opacity = 0.7, title = NULL,
               position = "bottomright")
 }
+
+piechart <- function(input.country) {
+  library("dplyr")
+  library("ggplot2")
+  library("plotly")
+  source("data_manipulation_cpj.R")
+  
+  data <- motive_confirmed()
+  
+  
+  # pie chart
+  # pick the country, display the nationalities of dead journalists
+  input.country <- "Syria"
+  country.data <- select(data, Nationality, Country_killed) %>%
+    filter(Country_killed == input.country)
+  country.data <- group_by(country.data, Nationality) %>%
+    dplyr::summarize(n = n())
+  
+  # pie chart construction using plotly
+  pie <- plot_ly(country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'outside', textinfo = 'label+percent') %>%
+    layout(title = paste("Nationalities of Journalists Killed in", input.country),
+           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  # print(pie)
+}
