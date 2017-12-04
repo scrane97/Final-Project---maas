@@ -16,6 +16,7 @@ library(geojsonio)
 library(countrycode)
 library(rgdal)
 library(jsonlite)
+library(leaflet)
 data <- read.csv("cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 

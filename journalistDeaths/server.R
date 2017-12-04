@@ -18,6 +18,7 @@ library(geojsonio)
 library(countrycode)
 library(rgdal)
 library(jsonlite)
+library(leaflet)
 source("data_manipulation_cpj.R")
 
 # Define server logic required to draw a histogram
