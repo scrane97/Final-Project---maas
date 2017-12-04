@@ -3,20 +3,23 @@ library(plyr)
 library(lubridate)
 library(plotly)
 library(data.table)
-
 library(geojson)
 library(geojsonio)
 library(countrycode)
 library(rgdal)
 library(jsonlite)
+
 data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
+
 motive_confirmed <- function(){
   filter(data, Type == "Motive Confirmed")
 }
+
 motive_unconfirmed <- function(){
   filter(data, Type == "Motive Unconfirmed")
 }
+
 media_worker <- function(){
   filter(data, Type == "Media Workers")
 }
@@ -413,7 +416,7 @@ source_fire_gender <- function (input_country) {
   return(plot)
 }
 
-
+country <- countrycode_data
 map <- function(){
   d <- count_of_deaths()
   
@@ -529,6 +532,8 @@ map <- function(){
   country[273,2] <- 1
   
   country$country_code <- countrycode_data$eurostat
+  
+
   url <- "https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson"
   
   doc <- readLines(url)
@@ -620,6 +625,7 @@ gender_male <- function() {
   women <- select(women, Sex, Job)
   women <- group_by(women, Job) %>%
     dplyr::summarize(n=n())
+  women <- filter(women, n >2)
   chart <- plot_ly(women, labels = ~Job, values = ~n, type = 'pie', 
                    marker = list(colors = c("#556677", "#AA3344", "#772200", 
                                             "#11AA22", "#AA231B88")),

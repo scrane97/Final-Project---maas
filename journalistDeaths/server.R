@@ -8,6 +8,16 @@
 #
 
 library(shiny)
+library(dplyr)
+library(plyr)
+library(lubridate)
+library(plotly)
+library(data.table)
+library(geojson)
+library(geojsonio)
+library(countrycode)
+library(rgdal)
+library(jsonlite)
 source("data_manipulation_cpj.R")
 
 # Define server logic required to draw a histogram

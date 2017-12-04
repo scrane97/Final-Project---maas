@@ -6,7 +6,16 @@
 # 
 #    http://shiny.rstudio.com/
 #
-
+library(dplyr)
+library(plyr)
+library(lubridate)
+library(plotly)
+library(data.table)
+library(geojson)
+library(geojsonio)
+library(countrycode)
+library(rgdal)
+library(jsonlite)
 data <- read.csv("cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 
@@ -62,7 +71,6 @@ shinyUI(
                     plotOutput("typeDeath"),
                     plotlyOutput("pie")
                   
-                
                 )
               )
               ),

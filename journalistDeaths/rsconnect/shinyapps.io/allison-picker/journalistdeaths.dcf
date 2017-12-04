@@ -1,0 +1,12 @@
+name: journalistdeaths
+title: journalistDeaths
+username:
+account: allison-picker
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 244171
+bundleId: 1114995
+url: https://allison-picker.shinyapps.io/journalistdeaths/
+when: 1512420579.67366
+asMultiple: FALSE
+asStatic: FALSE
