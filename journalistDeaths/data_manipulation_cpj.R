@@ -593,7 +593,7 @@ piechart <- function(input.country) {
     dplyr::summarize(n = n())
   
   # pie chart construction using plotly
-  pie <- plot_ly(country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'outside', textinfo = 'label+percent') %>%
+  pie <- plot_ly(height = 3000, width = 600, country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'outside', textinfo = 'label+percent') %>%
     layout(title = paste("Nationalities of Journalists Killed in", input.country),
            xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
            yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
