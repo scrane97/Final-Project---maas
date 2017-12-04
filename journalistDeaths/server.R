@@ -55,6 +55,9 @@ shinyServer(function(input, output) {
     
   output$AboutThisProject <- renderText("")
   output$Map <- renderLeaflet(map())
+  output$pie <- renderPlotly(
+    piechart(input$countries)
+    )
 
   
 })

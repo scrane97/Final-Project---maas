@@ -56,8 +56,11 @@ shinyUI(
 
                 # Show a plot of the generated distribution
                 mainPanel(
-                  plotOutput("typeDeath")
+                 
+                    plotOutput("typeDeath"),
+                    plotlyOutput("pie")
                   
+                
                 )
               )
               ),
