@@ -1,5 +1,7 @@
 library(dplyr)
 library(plyr)
+library(ggplot2)
+
 data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 motive_confirmed <- function(){
@@ -12,7 +14,6 @@ media_worker <- function(){
   filter(data, Type == "Media Workers")
 }
 
-
 count_of_deaths <- function(){
   
   countries <- select(data, Country_killed)
@@ -20,7 +21,6 @@ count_of_deaths <- function(){
   countries <- as.data.frame(countries[-c(98),])
   deaths_per_country <- countries
   deaths_per_country$deaths <- NA
-
 
     country <- countries[1,1]
     deaths <- filter(data, Country_killed == country)
@@ -375,5 +375,33 @@ table_of_predeathconditions <- function() {
   pre_death_conditions$Threatened <- Threatened
   pre_death_conditions$Tortured <- Tortured
  return(pre_death_conditions)
+}
+
+source_fire_gender <- function (input_country) {
+  # Creates dataframe containing columns: Country_killed, Type (motive type), and Source_fire
+  country_data <- data.frame(country= data$Country_killed, type=data$Type, source_fire=data$Source_fire)
+  
+  # Searches column 'country' and selects rows with 'Iraq'
+  country_data <- filter(country_data, grepl(input_country, country))
+  
+  # Searches column 'type' and selects rows with 'Motive Confirmed'
+  country_data <- filter(country_data, grepl("Motive Confirmed", type))  
+  
+  # List of all source fires
+  list_of_all_source_fires <- country_data$source_fire
+  
+  # Dataframe of just the types of source fire
+  df_type_of_source_fire <- distinct(country_data, source_fire)
+  
+  # List of just the types of source fire
+  list_type_of_source_fire <- df_type_of_source_fire$source_fire
+  
+  # Creates table with frequency of each group dropping levels containing 0
+  tab <- table(droplevels(country_data$source_fire))
+
+  #plot <- barplot(c(1,2,3,4,5,6,7), names.arg=list_type_of_source_fire, xlab="Source Fire", ylab="Frequency", col='light blue')
+  plot <- barplot(tab, xlab="Source Fire", ylab="Frequency", col='light blue')
+  
+  return(plot)
 }
 
