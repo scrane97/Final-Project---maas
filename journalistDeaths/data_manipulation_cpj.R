@@ -410,8 +410,9 @@ source_fire_gender <- function (input_country) {
   # Creates table with frequency of each group dropping levels containing 0
   tab <- table(droplevels(country_data$source_fire))
 
-  #plot <- barplot(c(1,2,3,4,5,6,7), names.arg=list_type_of_source_fire, xlab="Source Fire", ylab="Frequency", col='light blue')
-  plot <- barplot(tab, xlab="Source Fire", ylab="Frequency", col='light blue')
+  # Creates a barplot of the frequency of deaths grouped by type of source fire
+  plot <- barplot(tab, main="Frequency of Deaths by Source Fire", xlab="Source Fire", ylab="Frequency", col='#3366FF')
+  text(plot, 0, round(tab, 1), cex=1,pos=3)
   
   return(plot)
 }
