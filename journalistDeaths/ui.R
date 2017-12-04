@@ -40,7 +40,8 @@ shinyUI(
              ),
     tabPanel("World Map", 
               titlePanel("Map of Deaths"),
-              textOutput('WorldMap')
+              textOutput('WorldMap'),
+              leafletOutput('Map')
               ),
      tabPanel("Graphs", 
               titlePanel("View of Countries"),
@@ -55,7 +56,8 @@ shinyUI(
 
                 # Show a plot of the generated distribution
                 mainPanel(
-                  plotOutput("distPlot")
+                  plotOutput("typeDeath")
+                  
                 )
               )
               ),
@@ -65,8 +67,9 @@ shinyUI(
               ),
      tabPanel("Summary and Statistics", 
               titlePanel("Summary and Statistics"),
-              textOutput('SummaryAndStats'),
-              tableOutput('PreDeathConditions')
+              tableOutput('PreDeathConditions'),
+              textOutput('deathInfo'),
+              htmlOutput('mostDeaths')
               )
   )
 ))
