@@ -11,7 +11,8 @@ library(dplyr)
 library(plyr)
 
 
-data <- read.csv("cpj.csv")
+# Read in data to create a list of countries for the widget
+data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 
 countries <- select(data, Country_killed)
@@ -27,7 +28,6 @@ library(shiny)
 # Define UI for application that draws a histogram
 shinyUI(
   
-    
   fluidPage(
   navbarPage("Journalist Deaths", 
     tabPanel("About this Project",
