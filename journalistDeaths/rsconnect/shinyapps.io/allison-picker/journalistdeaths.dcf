@@ -5,8 +5,8 @@ account: allison-picker
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 244171
-bundleId: 1115100
+bundleId: 1115399
 url: https://allison-picker.shinyapps.io/journalistdeaths/
-when: 1512423648.92583
+when: 1512436293.21854
 asMultiple: FALSE
 asStatic: FALSE

@@ -532,9 +532,13 @@ map <- function(){
   country[270,2] <- 10
   country[273,2] <- 1
   
-  country$country_code <- countrycode_data$eurostat
+  country$iso_a2 <- countrycode_data$iso2c
   
-
+  country<- na.omit(country)
+  country <- dplyr::left_join(as.data.frame(world) %>% select(iso_a2), country, by=c("iso_a2" = "iso_a2"))
+    
+  
+  
   url <- "https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson"
   
   doc <- readLines(url)
