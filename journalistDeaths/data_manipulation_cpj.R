@@ -555,7 +555,7 @@ map <- function(){
   
   
   #####
-  bins <- c(0, 1, 2,  4, 5,10,20,60,100,300)
+  bins <- c(0, 2, 5,10,20,60,100,200,250,300)
   pal <- colorBin("Blues", domain = country$deaths, bins = bins)
   
   labels <- sprintf(
