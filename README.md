@@ -57,7 +57,7 @@ For this project, we used R.
 * leaflet
 
 ## API's Used
-*MapBox
+* MapBox
 
 ## Brief Overview of files
 * server.R : the server file has the outputs that will be on the shiny project.
