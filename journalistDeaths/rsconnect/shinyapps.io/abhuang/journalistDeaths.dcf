@@ -1,0 +1,12 @@
+name: journalistDeaths
+title: journalistDeaths
+username:
+account: abhuang
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 244212
+bundleId: 1118421
+url: https://abhuang.shinyapps.io/journalistDeaths/
+when: 1512549394.66248
+asMultiple: FALSE
+asStatic: FALSE

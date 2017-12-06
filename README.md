@@ -12,7 +12,7 @@ When press freedom violations occur, CPJ mobilizes a network of
    guide CPJ's activities, and their work has enabled us to do this project.
 
 ## Link to the Shiny App
-[Journalist Deaths Since 1992](https://allison-picker.shinyapps.io/journalistdeaths/)
+[Journalist Deaths Since 1992](https://abhuang.shinyapps.io/journalistDeaths/)
 
 ## Author's Names
 Abby Huang, Ally Picker, Michael Bradley, Sophie Crane
@@ -34,6 +34,8 @@ also had to deal with these anomalies. For example:
 * We inserted 'NA' into the many blank spots in the .csv file
 * We had to change the different spellings of countries within
 a single columns
+* We had to merge our country name data with standardized country codes using that package in R and iso_a2 coding
+* We learned how to incorporate leaflet and a Mapbox API for the interactive world map, feeding it specific country data standardized to country codes
 * We used plotly for the creation of our pie charts, as Base-R pie charts
 pale in comparison in terms of visuals and customizability
 

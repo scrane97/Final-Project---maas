@@ -1,3 +1,6 @@
+# Function file
+
+# Load libraries
 library(dplyr)
 library(plyr)
 library(lubridate)
@@ -9,29 +12,36 @@ library(countrycode)
 library(rgdal)
 library(jsonlite)
 
+# Read in data and set as data frame
 data <- read.csv("data/cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 
+# Separate data for motive confirmed
 motive_confirmed <- function(){
   filter(data, Type == "Motive Confirmed")
 }
 
+# Separate data for motive unconfirmed
 motive_unconfirmed <- function(){
   filter(data, Type == "Motive Unconfirmed")
 }
 
+# Get data for media workers
 media_worker <- function(){
   filter(data, Type == "Media Workers")
 }
 
+# Function that creates table of count of deaths 
 count_of_deaths <- function(){
   
+  # Scrub data for death numbers
   countries <- select(data, Country_killed)
   countries <- as.data.frame(countries[!duplicated(countries$Country_killed),])
   countries <- as.data.frame(countries[-c(98),])
   deaths_per_country <- countries
   deaths_per_country$deaths <- NA
 
+  # Set our country_killed data to the death values we got from each country
     country <- countries[1,1]
     deaths <- filter(data, Country_killed == country)
     deaths_per_country[1,2] <- nrow(deaths)
@@ -365,6 +375,7 @@ count_of_deaths <- function(){
     return(deaths_per_country)
     }
 
+# Summarize most death count
 most_deaths <- function(){
   deaths <- count_of_deaths()
   max <- as.data.frame(deaths[which.max(deaths$deaths),1], stringsAsFactors = FALSE)
@@ -372,13 +383,15 @@ most_deaths <- function(){
   return(m)
 }
 
+# Returns a table for journalists taken captive before death
 table_of_predeathconditions <- function() {
   captured <- as.data.frame(data$Taken_captive, stringsAsFactors = FALSE)
   captured <- filter(captured, data$Taken_captive == "Yes")
   Captured <- c(nrow(captured))
   threatened <- filter( as.data.frame(data$Threatened), data$Threatened == "Yes")
   Threatened <- c(nrow(threatened))
-  
+
+  # Returns a table for journalists tortured before death 
   data <- arrange(data, Tortured)
   Tortured <- c(98)
   pre_death_conditions <- as.data.frame(Captured)
@@ -417,6 +430,7 @@ source_fire_gender <- function (input_country) {
   return(plot)
 }
 
+# Country data code matched with standard country name
 country <- countrycode_data
 map <- function(){
   d <- count_of_deaths()
@@ -427,6 +441,7 @@ map <- function(){
   
   country$deaths <- 0
   
+  # Set death count per country
   country[1,2] <- 36
   country[4,2] <- 61
   country[7,2] <- 11
@@ -532,7 +547,10 @@ map <- function(){
   country[270,2] <- 10
   country[273,2] <- 1
   
+  # Match country codes with iso2c standards from geojson file
   country$iso_a2 <- countrycode_data$iso2c
+  
+  # Render map using country shape data 
   url <- "https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson"
   
   doc <- readLines(url)
@@ -540,29 +558,28 @@ map <- function(){
   write(doc, file = "tempgeoworld.json")
   world <- geojson_read("tempgeoworld.json", what = "sp")
   
+  # Don't include NA value countries
   country<- na.omit(country)
+  
+  # Merge tables to get aligning data for map generation
   country <- dplyr::left_join(as.data.frame(world) %>% select(iso_a2), country, by=c("iso_a2" = "iso_a2"))
     
-  
-  
 
-  
+  # Generate widget for map 
   map <- leaflet(world)
-  
   par(mar = c(5,5,0,0), cex = 0.8)
   
-  
-  
-  
-  #####
+  # Set color gradient + range
   bins <- c(0, 2, 5,10,20,60,100,200,250,300)
   pal <- colorBin("Blues", domain = country$deaths, bins = bins)
   
+  # Style display information for country label and count of death
   labels <- sprintf(
     "<strong>%s</strong><br/>%g deaths",
     country$country, country$deaths
   ) %>% lapply(htmltools::HTML)
   
+  # Call Mapbox API and define highlight interaction
   leaflet(world) %>%
     setView(-96, 37.8, 4) %>%
     addProviderTiles("MapBox", options = providerTileOptions(
@@ -590,19 +607,18 @@ map <- function(){
               position = "bottomright")
 }
 
+# Pie chart showing motives
 piechart <- function(input.country) {
-
   data <- motive_confirmed()
   
-  
-  # pie chart
-  # pick the country, display the nationalities of dead journalists
-
+  # Pie chart
+  # Pick the country, display the nationalities of dead journalists
   country.data <- select(data, Nationality, Country_killed) %>%
     filter(Country_killed == input.country)
   country.data <- group_by(country.data, Nationality) %>%
     dplyr::summarize(n = n())
   head(country.data)
+  
   # pie chart construction using plotly
   pie <- plot_ly(country.data, labels = ~Nationality, values = ~n, type = 'pie', textposition = 'inside', textinfo = 'label') %>%
     layout(title = paste("Nationalities of Journalists Killed in", input.country),
@@ -612,7 +628,7 @@ piechart <- function(input.country) {
 
 }
 
-
+# Pie chart on women journalist occupations using plotly
 gender_women <- function() {
   women <- filter(data, Sex == "Female")
   women <- select(women, Sex, Job)
@@ -626,13 +642,14 @@ gender_women <- function() {
   
 }
 
+# Pie chart on men journalist occupations using plotly
 gender_male <- function() {
-  women <- filter(data, Sex == "Male")
-  women <- select(women, Sex, Job)
-  women <- group_by(women, Job) %>%
+  men <- filter(data, Sex == "Male")
+  men <- select(men, Sex, Job)
+  men <- group_by(men, Job) %>%
     dplyr::summarize(n=n())
-  women <- filter(women, n >2)
-  chart <- plot_ly(women, labels = ~Job, values = ~n, type = 'pie', 
+  men <- filter(men, n >2)
+  chart <- plot_ly(men, labels = ~Job, values = ~n, type = 'pie', 
                    marker = list(colors = c("#556677", "#AA3344", "#772200", 
                                             "#11AA22", "#AA231B88")),
                    textposition = 'inside', textinfo = 'label') %>%

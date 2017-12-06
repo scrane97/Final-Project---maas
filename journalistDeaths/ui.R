@@ -1,11 +1,8 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
+# Abby Huang, Allison Picker, Michael Bradley, Sophie Crane
+# INFO 201 Final Project 
+# December 6th, 2017
+
+#load libraries
 library(dplyr)
 library(plyr)
 library(lubridate)
@@ -17,30 +14,34 @@ library(countrycode)
 library(rgdal)
 library(jsonlite)
 library(leaflet)
+library(shiny)
+
+#read in the csv file into a data frame 
 data <- read.csv("cpj.csv")
 data <- as.data.frame(data, stringsAsFactors = FALSE)
 
+#get the countries that journalists were killed data
 countries <- select(data, Country_killed)
+
+#scrub dataframe for duplicates
 countries <- as.data.frame(countries[!duplicated(countries$Country_killed),])
 v <- countries[-c(98),]
 countries <- as.data.frame(v)
-
 list <- countries$v
 
 
-library(shiny)
-
-
-# Define UI for application that draws a histogram
+# Define UI for application that includes multiple tabs to display data
 shinyUI(
   
   fluidPage(
   navbarPage("Journalist Deaths Since 1992", 
              tags$head(
+               #set background image
                tags$style(HTML("body{ 
                                background-image: url( http://roseburgfcc.org/wp-content/uploads/2016/03/storyteller1.jpg );
                                }"))),
-             
+    
+    #HTML for tab layout
     tabPanel("About this Project",
              # About this project
              h1("About this Project"),
@@ -48,13 +49,16 @@ shinyUI(
                tags$br("Some of the initial questions that we aimed to answer with this analysis include:")),
              tags$li("Which countries are the deadliest for journalists?"),
              tags$li("Which groups are responsible for the deaths of journalists?"),
-             tags$li("Whether it is more common to be killed when working abroad as opposed to working at home"),
-             tags$li("Is there a difference in the circumstances when men and women were killed?"),
-             tags$li("Is there a significant difference in how male and female journalists were deployed?"),
+             tags$li("Is it more common for journalists to be killed working abroad as opposed to working at home?"),
+             tags$li("Are there any differences in the circumstances in which men and women journalists were killed?"),
+             tags$li("How many journalists have been killed in different countries around the world? Can we correlate rates of deaths based on world events?"),
              p(),
-             p("These questions and their answers are aimed to help give insight as to what level of free media comes out of these countries,",
-               tags$br("and what political/social/economic implications there might be.")),
-             p("They can also help people understand the threats that journalists face in these countries."),
+             p("By tracking the brute injustice that inflicts journalists all over the world doing their jobs, this public data is protecting the freedom of expression and democracy. 
+               It is an effort made by the international community that defends the free flow of news and commentary by publicizing and taking action against the systems 
+               that allow journalists to be attacked, imprisoned, killed, kidnapped, threatened, censored or harassed. Based on this indicative data, a global campaign against 
+               impunity was inspired, especially in countries where they found significantly high rates of murder of journalists, yet responsively low conviction rates.",
+               tags$br()),
+             p("The data CPJ has collected says a lot about the significant events in history, and what political/social/economic implications there might be. The recorded responses made by countries helps us understand the threats that different journalists face across the world."),
              
              # The Dataset
              h1("The Dataset"),
@@ -63,23 +67,27 @@ shinyUI(
                ". The dataset was taken from Kaggle.com.", 
                tags$br("As for the data itself, it has been gathered from news sources from 1992 - 2016 by the ", tags$em("Committee to Protect Journalists (CPJ). "))),
              
-             # CPJ
+             # Description about CPJ
              h1("Comittee to Protect Journalists"),
              p("When press freedom violations occur, CPJ has correspondents who report and take action on behalf of those targeted. CPJ reports", 
-               tags$br("are on violations in repressive countires, conflict zones, and established democracies alike. A Board of prominent journalists ",
-               tags$br("from around the world helps guide CPJ's activites."))),
+               tags$br("are on violations in repressive countires, conflict zones, and established democracies alike. A board of prominent journalists ",
+               tags$br("from around the world helps guide CPJ's activites. They encourage people to contribute to their growing database."))),
              
              # Analysis
              h1("Analysis"),
-             p("This data is not complete, nor does it include every country, but it does reflect the pattern for journalist deaths. This pattern is most", 
-               tags$br("closely related to internal political conflict & wars going on in these countries. Those countires with a greater frequency of these issues",
+             p("This data does not appear to be complete, with only 177 countries represented, and comparatively low rates of death despite known censorship conflicts around the world, but it does reflect a pattern within journalist deaths.
+                For example, it seems unlikely given Saudi Arabia's strict censorship laws that only 1 journalist had died in 25 years. 
+               North Korea doesn't have any recorded incidents, and China's population of nearly 1.4B people has only seen 5 journalists deaths. This pattern is most", 
+               tags$br("closely related to internal political conflict & wars going on in these countries that have been highly publicised. Those countries with a greater frequency of these issues",
                tags$br("have the highest reports of journalist deaths when correlated with impunity for murder."))), 
-             p("High numbers of unknown source fire demonstrates a lack of documentation within the data."),
-             p("Additionally, un-proportional amounts of reports in more highly publicised countries than others",
-               tags$br("suggests that the data is influenced more by events, and not by regular practice in these countries.")),
-             p("There are disproportionately more male journalists than female who were reported as murdered in the data, but there was an interesting consistency
-               present across genders. Print and broadcast journalists are the most targeted, likely as they are the ones in the field. The majority of deaths were
-               not preceded by torture, threats, or captivity.")
+             p("High numbers of unknown source fire indicates a lack of documentation within the data."),
+             p("Additionally, there seems to exist un-proportional amounts of reports in more highly publicised countries than others",
+               tags$br("suggests that the data is influenced more by events, and not indicative of regular censorship in these countries.")),
+             p("There are disproportionately more male journalists than female who were reported as murdered in the data, yet an interesting consistency
+               present across genders: print and broadcast journalists are the most targeted, likely as they are the ones in the field."),
+             p("The majority of journalist deaths were not preceded by torture, threats, or captivity."),
+             p("Journalists who died were more often nationals of the country that they died in rather than those working abroad."),
+             tags$br("") 
              ),
     
     tabPanel("World Map", 
@@ -121,7 +129,7 @@ shinyUI(
               p("- The majority of reporters are killed at home, as opposed to being killed in foreign countries."),
               tags$br(),
               
-              p("- There is no equal representation between male and female journalists - an overwhelming majority of the deaths logged were male.",
+              p("- There is a lack of equal representation between male and female journalists - an overwhelming majority of the deaths logged were male.",
                 tags$br("This begs the following questions that would require more information to get answered - are female deaths less noticed? Are there just fewer",
                 tags$br("female journalists? Or are male journalists just more likely to die?"))),
               
@@ -139,7 +147,11 @@ shinyUI(
               p("- Additionally, we noticed that the majority of deaths were not preceeded by torture, threat, or captivity."),
               tableOutput('PreDeathConditions'),
               p("From looking at this results of the table, it reveals that 1175 of the document individuals have no recorded instances of torture/threats/captivity.",
-                tags$br("We found this to be very interesting, as we suspected that a higher amount of individuals would have had something happen to them before death."))
+                tags$br("We found this to be very interesting, as we suspected that a higher amount of individuals would have had something happen to them before death."),
+              ##ABBY FIX
+              p("The countries with the most journalist deaths are: Iraq, Philippines, and Syria."),
+              tags$br())
+              
               )
   )
 ))
