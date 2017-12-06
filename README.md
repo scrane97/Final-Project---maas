@@ -11,7 +11,8 @@ When press freedom violations occur, CPJ mobilizes a network of
    alike. A board of prominent journalists from around the world helps
    guide CPJ's activities, and their work has enabled us to do this project.
 
-## Link to Shiny App
+## Link to the Shiny App
+https://allison-picker.shinyapps.io/journalistdeaths/
 
 ## Technical Aspects
 The incompleteness of the data set was a big challenge. To counteract
