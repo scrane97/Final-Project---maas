@@ -21,11 +21,20 @@ library(jsonlite)
 library(leaflet)
 source("data_manipulation_cpj.R")
 
-# Define server logic required to draw a histogram
+
 shinyServer(function(input, output) {
   
+  # Define server logic required to draw a histogram
   output$typeDeath <- renderPlot({
     source_fire_gender(input$countries)
+  })
+  
+  output$aboutProject2 <- renderUI({
+    p1 <- paste("For this INFO 201 Project, we looked at a dataset centered around journalist deaths in the last 25 years.
+                Some of the questions we wanted answered include:
+                tags$li('test')")
+    
+    HTML(paste(p1, sep = '<br/>'))
   })
   
   output$aboutProject <- renderText("For this project we looked at a dataset about journalists killed in the last 25 years.
@@ -50,19 +59,17 @@ shinyServer(function(input, output) {
   output$genderCorrelation <- renderText("This shows the correlation of Gender and the death method")
   
 
-
+  # Summary and Statistics Tab
+  # Creates Table and displays Table about what happened to journalists before death
     make_table <- reactive({
       return(table_of_predeathconditions())
     })
-  
   output$PreDeathConditions <- renderTable({
      make_table()
     })
+  
   output$deathInfo <- renderText("This table shows what the journalists experienced prior to death. As you can see, 1175 of the documented individuals have no recorded instances of torture, etc")
-  country <- most_deaths()
-  output$mostDeaths <- renderText({
-    paste("<br><br><b>Iraq<b>"," has had the most journalists die within its border since 1992")
-    })
+
     
   output$AboutThisProject <- renderText("")
   output$Map <- renderLeaflet(map())
